@@ -1,26 +1,45 @@
-/**Section 3 - lesson 11
+/**Section 3 - lesson 13
  * 
- * npm initializing / creating package.json
- * and 
- * downloading lodash package "_"
- * 
- * TIPS: YOU CAN REMOVE WHOLE node_modules map and install all them back by 'npm install'
- * in terminal. npm will find all packages with right versions through package.json file
+ * this lecture shows how to communicate with your node.js app via terminal.
+ * (OBS NOTHING TO DO WITH EXTERNAL MODULES IN THIS LECTURE!!)
+ * but next lecture will have a module to make this communication way more easier
  * 
  *----------------------------------------------------*/
 
 console.log('starting apps.js');
 
+const fs = require('fs');
 const _ = require('lodash');
 
-console.log(_.isString(true));
-//shows false , because true is boolean not string
+const notes = require('./notes');
 
-console.log(_.isString(5));
-//shows false , because 5 is not string
+/*
+this prints every arguments that are passed into app.js through terminal
+for example if you write (IN TERMINAL):
+node app.js randomNamexxxx --titlesdsd="blabla"
+and this 'console.log(process.argv);' in app.js will print things below
 
-console.log(_.isString("5"));
-//shows true , because 5 is string
+[ '/usr/bin/node',
+  '/home/tasa/Documents/js/udemyNode/app.js',
+  'randomNamexxxx',
+  '--titlesdsd=blabla' ]
 
-console.log(_.uniq([1,1,1,1,1,2,3,3,3,"abc",'abc','abc','c','c']));
-//shows [ 1, 2, 3, 'abc', 'c' ]
+*/
+
+console.log(process.argv);
+
+var command = process.argv[2];
+console.log('Command: ', command);
+
+if (command === 'add')
+    console.log('Adding new note');   
+else if(command === 'list')
+    console.log('Listing all notes');
+else if(command === 'read')
+    console.log('Fetching notes');
+else if(command === 'remove')
+    console.log('Removing notes');
+else
+    console.log('Not recognized');
+    
+    
