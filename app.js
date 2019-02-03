@@ -1,4 +1,4 @@
-/**Section 3 - lesson 13
+/**Section 3 - lesson ??
  * 
  * this lecture shows how to communicate with your node.js app via terminal.
  * (OBS NOTHING TO DO WITH EXTERNAL MODULES IN THIS LECTURE!!)
@@ -10,36 +10,51 @@ console.log('starting apps.js');
 
 const fs = require('fs');
 const _ = require('lodash');
+const yargs= require('yargs');
 
 const notes = require('./notes');
 
+//console.log(process.argv);
+//console.log(yargs.argv);
+
 /*
-this prints every arguments that are passed into app.js through terminal
-for example if you write (IN TERMINAL):
-node app.js randomNamexxxx --titlesdsd="blabla"
-and this 'console.log(process.argv);' in app.js will print things below
+commands without hyphens is collected under an array that has a key of _ as you can see on the first character on terminal result
+{ _: [ 'remove' ], title: 'blabla', '$0': 'app.js' }
 
-[ '/usr/bin/node',
-  '/home/tasa/Documents/js/udemyNode/app.js',
-  'randomNamexxxx',
-  '--titlesdsd=blabla' ]
+the result above contains to this command on terminal'node app.js remove --title="blabla" '
 
+which makes in this case "process.argv[2]" equals to "yargs.argv._"
 */
 
-console.log(process.argv);
-
-var command = process.argv[2];
+var argv = yargs.argv;
+var command = argv._[0]; //left code replaces the right side 'var command =process.argv[2];'
 console.log('Command: ', command);
+console.log();
+
+/*
+write this to terminal
+node app.js add --title="blabla" --body=deneme --ucuncu ucuncuBudur
+
+write this to code in e.g app.js
+console.log(`this is argv title ${argv.title} . and this is body ${argv.body} and the last one is ucuncu ${argv.ucuncu}`);
+
+result in terminal is going to be this
+this is argv title blabla . and this is body deneme and the last one is ucuncu ucuncuBudur
+
+conclusion:
+with the YARGS module, arguments in terminal with double hyphens can be writen in double quotes, single quotes, 
+without quotes(then you cant use space), or no quotes nor equality sign.
+for instance
+    --body="deneme"  --body='deneme'  --body=deneme   --body deneme 
+*/
 
 if (command === 'add')
-    console.log('Adding new note');   
+    notes.addNote(argv.title, argv.body);
 else if(command === 'list')
-    console.log('Listing all notes');
+    notes.getAll();
 else if(command === 'read')
-    console.log('Fetching notes');
+    notes.getNote(argv.title);
 else if(command === 'remove')
-    console.log('Removing notes');
+    notes.removeNote(argv.title);
 else
     console.log('Not recognized');
-    
-    
